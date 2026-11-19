@@ -3,7 +3,7 @@ export const sections = [
   {
     id: 'trails',
     title: 'Urban Trails',
-    description: 'Trails that start in the city centre or at a metro station.',
+    description: 'Trails that start in the city centre or at a metro station, short enough to walk after work.',
     pin: '#2a81cb',
   },
   {
@@ -91,7 +91,7 @@ const MIDOES: [number, number] = [41.11397, -8.4742]; // Midões hamlet, Foz do 
 const allTrails: Trail[] = [
   {
     id: 'hills-of-porto',
-    name: 'The hills of Porto',
+    name: 'The Hills of Porto',
     area: 'Porto',
     start: 'Carolina Michaëlis metro station',
     end: 'Campanhã metro station',
@@ -109,7 +109,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'former-line-of-alfandega',
-    name: 'The Former Line of Alfândega',
+    name: 'The Old Alfândega Railway',
     area: 'Porto',
     start: 'Miradouro das Fontaínhas',
     end: 'Campanhã metro station',
@@ -118,7 +118,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'leca-river-missing-trail',
-    name: 'Leça River Missing Trail',
+    name: 'The Missing Leça River Trail',
     area: 'Matosinhos',
     start: 'Esposade metro station',
     end: 'Senhor de Matosinhos metro station',
@@ -127,7 +127,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'rio-febros-trail',
-    name: 'Rio Febros Trail',
+    name: 'The Febros River Trail',
     area: 'Gaia',
     start: 'Ponte Luiz I',
     end: 'Parque Biológico de Gaia',
@@ -136,7 +136,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'azevedo-yellow-walk',
-    name: 'Azevedo and the yellow walk',
+    name: 'Azevedo and the Yellow Walk',
     area: 'Porto',
     start: 'Campanhã metro station',
     circular: true,
@@ -145,7 +145,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'azevedo-old-paths',
-    name: 'Azevedo and the old paths',
+    name: 'Azevedo and the Old Paths',
     area: 'Porto',
     start: 'Campanhã metro station',
     circular: true,
@@ -154,7 +154,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'lipor-hill',
-    name: 'LIPOR hill',
+    name: 'LIPOR Hill',
     area: 'Maia',
     start: 'Palmilheira train station',
     circular: true,
@@ -181,7 +181,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'fields-of-foz',
-    name: 'The fields of Foz',
+    name: 'The Fields of Foz',
     area: 'Porto',
     start: 'Praça do Império metrobus station',
     circular: true,
@@ -190,7 +190,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'tgv-could-have-been',
-    name: 'TGV could have been',
+    name: 'The TGV That Could Have Been',
     area: 'Gaia',
     start: 'Manuel Leão metro station',
     end: 'Santo Ovídio metro station',
@@ -199,7 +199,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'archeira-ribeira-and-the-woods',
-    name: 'Archeira Ribeira and the woods',
+    name: 'Archeira Ribeira and the Woods',
     area: 'Gondomar',
     start: 'Gondomar (Souto) bus station',
     end: 'Campanhã metro station',
@@ -208,7 +208,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'mount-castro-and-river-torto',
-    name: 'Mount Castro and River Torto',
+    name: 'Mount Castro and the Torto River',
     area: 'Gondomar',
     start: 'Fânzeres metro station',
     end: 'Gondomar (Souto) bus station',
@@ -217,7 +217,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'quebrantoes-paths',
-    name: 'Quebrantões Paths',
+    name: 'The Quebrantões Paths',
     area: 'Gaia',
     start: 'Miradouro das Fontaínhas',
     end: 'Jardim do Morro metro station',
@@ -258,7 +258,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'biological-park',
-    name: 'Biological Park',
+    name: 'Gaia Biological Park',
     area: 'Gaia',
     start: 'D. João II metro station',
     circular: true,
@@ -310,7 +310,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'north-of-river-leca',
-    name: 'North of River Leça',
+    name: 'North of the Leça River',
     area: 'Matosinhos',
     start: 'UNIR bus (Monte Xisto)',
     circular: true,
@@ -360,7 +360,7 @@ const allTrails: Trail[] = [
   },
   {
     id: 'rio-uima',
-    name: 'Rio Uíma',
+    name: 'The Uíma River',
     area: 'Santa Maria da Feira',
     start: 'UNIR bus (N326)',
     circular: true,
