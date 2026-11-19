@@ -3,6 +3,8 @@ import { photosFor } from '../data/photos';
 import { PhotoViewer } from './PhotoViewer';
 import type { Trail } from '../data/trails';
 
+const SHOW_LANDMARKS = false;
+
 type Props = {
   trail: Trail;
   selected: boolean;
@@ -59,10 +61,24 @@ export function TrailCard({ trail, selected, onSelect }: Props) {
           <dl>
             <dt>Start</dt>
             <dd>{trail.start ?? '—'}</dd>
-            <dt>End</dt>
-            <dd>{trail.circular ? 'Circular (back to the start)' : (trail.end ?? '—')}</dd>
-            <dt>Landmarks</dt>
-            <dd>{trail.landmarks.length ? trail.landmarks.join(', ') : '—'}</dd>
+            {trail.circular ? (
+              <>
+                <dt>Route</dt>
+                <dd>Circular</dd>
+              </>
+            ) : (
+              <>
+                <dt>End</dt>
+                <dd>{trail.end ?? '—'}</dd>
+              </>
+            )}
+            {/* Landmarks are hidden for now; set SHOW_LANDMARKS to true to bring them back. */}
+            {SHOW_LANDMARKS && (
+              <>
+                <dt>Landmarks</dt>
+                <dd>{trail.landmarks.length ? trail.landmarks.join(', ') : '—'}</dd>
+              </>
+            )}
           </dl>
         </div>
       </button>
