@@ -9,7 +9,8 @@ type Props = {
 };
 
 function PhotoSlider({ photos, name }: { photos: string[]; name: string }) {
-  const [index, setIndex] = useState(0);
+  // Each page load starts on a random photo; the arrows still go through all of them in order.
+  const [index, setIndex] = useState(() => Math.floor(Math.random() * photos.length));
 
   if (!photos.length) {
     return (
