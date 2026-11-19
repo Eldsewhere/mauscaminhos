@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { TrailCard } from './components/TrailCard';
 import { TrailMap } from './components/TrailMap';
-import { trails } from './data/trails';
+import { sections, trails } from './data/trails';
 import './App.css';
 
 export default function App() {
@@ -12,6 +12,7 @@ export default function App() {
     setSelectedId(id);
     document.getElementById(`trail-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
+
 
   return (
     <div className="page">
@@ -25,19 +26,31 @@ export default function App() {
           <TrailMap trails={trails} selectedId={selectedId} onSelect={selectFromMap} />
         </section>
 
-        <section aria-labelledby="trails-heading">
-          <h2 id="trails-heading">Trails</h2>
-          <div className="trail-grid">
-            {trails.map((trail) => (
-              <TrailCard
-                key={trail.id}
-                trail={trail}
-                selected={trail.id === selectedId}
-                onSelect={setSelectedId}
-              />
-            ))}
-          </div>
-        </section>
+        {sections.map((section) => {
+          const list = trails.filter((t) => (t.section ?? 'trails') === section.id);
+          return (
+            <section key={section.id} aria-labelledby={`${section.id}-heading`}>
+              <h2 id={`${section.id}-heading`}>
+                <span className="section-dot" style={{ background: section.pin }} aria-hidden="true" />
+                {section.title}
+              </h2>
+              {list.length ? (
+                <div className="trail-grid">
+                  {list.map((trail) => (
+                    <TrailCard
+                      key={trail.id}
+                      trail={trail}
+                      selected={trail.id === selectedId}
+                      onSelect={setSelectedId}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="section-empty">Coming soon.</p>
+              )}
+            </section>
+          );
+        })}
       </main>
     </div>
   );

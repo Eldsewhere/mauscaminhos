@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import type { Trail } from '../data/trails';
+import { sections, type SectionId, type Trail } from '../data/trails';
 
 const pinIcon = L.icon({
   iconUrl: markerIcon,
@@ -17,6 +17,31 @@ const pinIcon = L.icon({
   tooltipAnchor: [14, -28],
   shadowSize: [41, 41],
 });
+
+/** A pin the same shape and size as the default, in the given colour. */
+const colouredPin = (colour: string) =>
+  L.divIcon({
+    className: 'pin-coloured',
+    html: `<svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12.5 0C5.6 0 0 5.6 0 12.5 0 21.9 12.5 41 12.5 41S25 21.9 25 12.5C25 5.6 19.4 0 12.5 0z"
+        fill="${colour}" stroke="rgb(0 0 0 / 0.35)" stroke-width="1"/>
+      <circle cx="12.5" cy="12.5" r="5" fill="#fff"/>
+    </svg>`,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    tooltipAnchor: [14, -28],
+  });
+
+/** Main trails keep Leaflet's blue pin; other sections get their own colour. */
+const pinIcons: Record<SectionId, L.Icon | L.DivIcon> = {
+  trails: pinIcon,
+  limited: colouredPin(sections[1].pin),
+  outside: colouredPin(sections[2].pin),
+};
+
+const sectionOf = (t: Trail): SectionId => t.section ?? 'trails';
+const sectionTitle = (id: SectionId) => sections.find((s) => s.id === id)!.title;
 
 type Props = {
   trails: Trail[];
@@ -30,6 +55,7 @@ type Pin = { key: string; position: [number, number]; trails: Trail[] };
 function groupByStart(trails: Trail[]): Pin[] {
   const pins = new Map<string, Pin>();
   for (const trail of trails) {
+    if (!trail.position) continue; // no location yet: card only, no pin
     const key = trail.position.join(',');
     const pin = pins.get(key) ?? { key, position: trail.position, trails: [] };
     pin.trails.push(trail);
@@ -57,7 +83,7 @@ function WatchZoom({ onZoom }: { onZoom: (zoom: number) => void }) {
 function FlyToSelected({ trail }: { trail: Trail | undefined }) {
   const map = useMap();
   useEffect(() => {
-    if (trail) map.flyTo(trail.position, Math.max(map.getZoom(), 15), { duration: 0.8 });
+    if (trail?.position) map.flyTo(trail.position, Math.max(map.getZoom(), 15), { duration: 0.8 });
   }, [map, trail]);
   return null;
 }
@@ -70,7 +96,7 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
   const showLabels = zoom >= LABEL_ZOOM;
 
   useEffect(() => {
-    if (selected) markers.current[selected.position.join(',')]?.openPopup();
+    if (selected?.position) markers.current[selected.position.join(',')]?.openPopup();
   }, [selected]);
 
   return (
@@ -83,7 +109,7 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
         <Marker
           key={pin.key}
           position={pin.position}
-          icon={pinIcon}
+          icon={pinIcons[sectionOf(pin.trails[0])]}
           ref={(m) => {
             markers.current[pin.key] = m;
           }}
@@ -100,7 +126,10 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
           </Tooltip>
           <Popup>
             <div className="pin-popup">
-              <div className="pin-popup-start">Start: {pin.trails[0].start}</div>
+              {pin.trails[0].start && <div className="pin-popup-start">Start: {pin.trails[0].start}</div>}
+              {pin.trails[0].section && (
+                <div className="pin-popup-start">{sectionTitle(pin.trails[0].section)}</div>
+              )}
               {pin.trails.map((t) => (
                 <button
                   key={t.id}
