@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { photosFor } from '../data/photos';
+import { PhotoViewer } from './PhotoViewer';
 import type { Trail } from '../data/trails';
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 function PhotoSlider({ photos, name }: { photos: string[]; name: string }) {
   // Each page load starts on a random photo; the arrows still go through all of them in order.
   const [index, setIndex] = useState(() => Math.floor(Math.random() * photos.length));
+  const [viewing, setViewing] = useState(false);
 
   if (!photos.length) {
     return (
@@ -24,7 +26,12 @@ function PhotoSlider({ photos, name }: { photos: string[]; name: string }) {
 
   return (
     <div className="trail-photo">
-      <img src={photos[index]} alt={`${name}, photo ${index + 1} of ${photos.length}`} loading="lazy" />
+      <button type="button" className="photo-open" aria-label={`Open ${name} photos`} onClick={() => setViewing(true)}>
+        <img src={photos[index]} alt={`${name}, photo ${index + 1} of ${photos.length}`} loading="lazy" />
+      </button>
+      {viewing && (
+        <PhotoViewer photos={photos} index={index} name={name} onStep={step} onClose={() => setViewing(false)} />
+      )}
       {photos.length > 1 && (
         <>
           <button type="button" className="photo-nav prev" aria-label="Previous photo" onClick={() => step(-1)}>
