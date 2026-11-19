@@ -59,6 +59,12 @@ h2 {
   vertical-align: 2px;
 }
 
+.section-description {
+  margin: -8px 0 18px;
+  max-width: 60ch;
+  color: var(--muted);
+}
+
 .section-empty {
   color: var(--muted);
 }
@@ -289,7 +295,7 @@ h2 {
   padding: 14px 16px 16px;
 }
 
-.trail-body h3 {
+.trail-body h4 {
   margin: 0 0 10px;
   font-size: 1.15rem;
 }
@@ -314,4 +320,28 @@ h2 {
   .trail-map {
     height: 320px;
   }
+}
+
+/* Location subsections inside a section (Porto, Matosinhos, ...) */
+.area + .area {
+  margin-top: 28px;
+}
+
+.area-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.area-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }

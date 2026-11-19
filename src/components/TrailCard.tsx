@@ -57,7 +57,7 @@ export function TrailCard({ trail, selected, onSelect }: Props) {
       <PhotoSlider photos={photosFor(trail.id)} name={trail.name} />
       <button type="button" className="trail-card-button" onClick={() => onSelect(trail.id)}>
         <div className="trail-body">
-          <h3>{trail.name}</h3>
+          <h4>{trail.name}</h4>
           <dl>
             <dt>Start</dt>
             <dd>{trail.start ?? '—'}</dd>

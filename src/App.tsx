@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { TrailCard } from './components/TrailCard';
 import { TrailMap } from './components/TrailMap';
-import { sections, trails } from './data/trails';
+import { areas, sections, trails, type Trail } from './data/trails';
 import './App.css';
 
 export default function App() {
@@ -13,6 +13,38 @@ export default function App() {
     document.getElementById(`trail-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
+  const grid = (list: Trail[]) => (
+    <div className="trail-grid">
+      {list.map((trail) => (
+        <TrailCard key={trail.id} trail={trail} selected={trail.id === selectedId} onSelect={setSelectedId} />
+      ))}
+    </div>
+  );
+
+  // A section whose trails have an area is split by location (Porto, Matosinhos, ...); others are one grid.
+  const sectionBody = (sectionId: string, list: Trail[]) => {
+    if (!list.length) return <p className="section-empty">Coming soon.</p>;
+    if (!list.some((t) => t.area)) return grid(list);
+    const noArea = list.filter((t) => !t.area);
+    return (
+      <>
+        {areas.map((area) => {
+          const inArea = list.filter((t) => t.area === area);
+          if (!inArea.length) return null;
+          const headingId = `area-${sectionId}-${area.toLowerCase().replace(/\s+/g, '-')}`;
+          return (
+            <section key={area} className="area" aria-labelledby={headingId}>
+              <h3 id={headingId} className="area-heading">
+                {area}
+              </h3>
+              {grid(inArea)}
+            </section>
+          );
+        })}
+        {noArea.length > 0 && <div className="area">{grid(noArea)}</div>}
+      </>
+    );
+  };
 
   return (
     <div className="page">
@@ -47,20 +79,8 @@ export default function App() {
                 <span className="section-dot" style={{ background: section.pin }} aria-hidden="true" />
                 {section.title}
               </h2>
-              {list.length ? (
-                <div className="trail-grid">
-                  {list.map((trail) => (
-                    <TrailCard
-                      key={trail.id}
-                      trail={trail}
-                      selected={trail.id === selectedId}
-                      onSelect={setSelectedId}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <p className="section-empty">Coming soon.</p>
-              )}
+              <p className="section-description">{section.description}</p>
+              {sectionBody(section.id, list)}
             </section>
           );
         })}
