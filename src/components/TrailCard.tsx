@@ -65,17 +65,12 @@ export function TrailCard({ trail, selected, onSelect }: Props) {
         <div className="trail-body">
           <h4>{text.name}</h4>
           <dl>
-            <dt>{t.start}</dt>
+            <dt>{trail.circular ? t.circular : t.start}</dt>
             <dd>
               <TransportBadge operator={operatorOf(trail.start)} />
               {text.start ?? '—'}
             </dd>
-            {trail.circular ? (
-              <>
-                <dt>{t.route}</dt>
-                <dd>{t.circular}</dd>
-              </>
-            ) : (
+            {!trail.circular && (
               <>
                 <dt>{t.end}</dt>
                 <dd>
