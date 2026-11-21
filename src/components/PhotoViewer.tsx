@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useLang } from '../i18n/context';
 
 type Props = {
   photos: string[];
@@ -11,6 +12,7 @@ type Props = {
 /** Full-screen view of one trail photo, shown at the size of the original file. */
 export function PhotoViewer({ photos, index, name, onStep, onClose }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
+  const { t } = useLang();
 
   // A native <dialog> gives us the dark backdrop, focus trapping and Esc to close.
   // No close() on cleanup: its async "close" event would shut the viewer right after it opens
@@ -26,7 +28,7 @@ export function PhotoViewer({ photos, index, name, onStep, onClose }: Props) {
     <dialog
       ref={dialog}
       className="photo-viewer"
-      aria-label={`${name} photos`}
+      aria-label={t.photosOf(name)}
       onClose={onClose}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose(); // click on the backdrop
@@ -46,16 +48,16 @@ export function PhotoViewer({ photos, index, name, onStep, onClose }: Props) {
         if (e.key === 'ArrowRight') onStep(1);
       }}
     >
-      <img src={photos[index]} alt={`${name}, photo ${index + 1} of ${photos.length}`} />
-      <button type="button" className="viewer-close" aria-label="Close" onClick={onClose}>
+      <img src={photos[index]} alt={t.photoAlt(name, index + 1, photos.length)} />
+      <button type="button" className="viewer-close" aria-label={t.close} onClick={onClose}>
         ×
       </button>
       {many && (
         <>
-          <button type="button" className="viewer-nav prev" aria-label="Previous photo" onClick={() => onStep(-1)}>
+          <button type="button" className="viewer-nav prev" aria-label={t.previousPhoto} onClick={() => onStep(-1)}>
             ‹
           </button>
-          <button type="button" className="viewer-nav next" aria-label="Next photo" onClick={() => onStep(1)}>
+          <button type="button" className="viewer-nav next" aria-label={t.nextPhoto} onClick={() => onStep(1)}>
             ›
           </button>
         </>

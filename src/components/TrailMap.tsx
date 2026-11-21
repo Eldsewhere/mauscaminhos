@@ -5,7 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import { sections, type SectionId, type Trail } from '../data/trails';
+import { sectionText, sections, trailText, type SectionId, type Trail } from '../data/trails';
+import { useLang } from '../i18n/context';
 
 const pinIcon = L.icon({
   iconUrl: markerIcon,
@@ -41,7 +42,6 @@ const pinIcons: Record<SectionId, L.Icon | L.DivIcon> = {
 };
 
 const sectionOf = (t: Trail): SectionId => t.section ?? 'trails';
-const sectionTitle = (id: SectionId) => sections.find((s) => s.id === id)!.title;
 
 type Props = {
   trails: Trail[];
@@ -94,6 +94,9 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
   const selected = trails.find((t) => t.id === selectedId);
   const [zoom, setZoom] = useState(12);
   const showLabels = zoom >= LABEL_ZOOM;
+  const { lang, t } = useLang();
+  const name = (trail: Trail) => trailText(trail, lang).name;
+  const sectionTitle = (id: SectionId) => sectionText(sections.find((s) => s.id === id)!, lang).title;
 
   useEffect(() => {
     if (selected?.position) markers.current[selected.position.join(',')]?.openPopup();
@@ -120,24 +123,28 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
             permanent={showLabels}
             className="pin-label"
           >
-            {pin.trails.map((t) => (
-              <div key={t.id}>{t.name}</div>
+            {pin.trails.map((trail) => (
+              <div key={trail.id}>{name(trail)}</div>
             ))}
           </Tooltip>
           <Popup>
             <div className="pin-popup">
-              {pin.trails[0].start && <div className="pin-popup-start">Start: {pin.trails[0].start}</div>}
+              {pin.trails[0].start && (
+                <div className="pin-popup-start">
+                  {t.start}: {trailText(pin.trails[0], lang).start}
+                </div>
+              )}
               {pin.trails[0].section && (
                 <div className="pin-popup-start">{sectionTitle(pin.trails[0].section)}</div>
               )}
-              {pin.trails.map((t) => (
+              {pin.trails.map((trail) => (
                 <button
-                  key={t.id}
+                  key={trail.id}
                   type="button"
-                  className={t.id === selectedId ? 'pin-popup-trail selected' : 'pin-popup-trail'}
-                  onClick={() => onSelect(t.id)}
+                  className={trail.id === selectedId ? 'pin-popup-trail selected' : 'pin-popup-trail'}
+                  onClick={() => onSelect(trail.id)}
                 >
-                  {t.name}
+                  {name(trail)}
                 </button>
               ))}
             </div>

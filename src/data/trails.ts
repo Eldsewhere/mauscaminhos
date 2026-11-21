@@ -1,22 +1,31 @@
-/** The page sections, in the order they appear: heading, the line under it, and map pin colour. */
+import type { Lang } from '../i18n/strings';
+
+/** The page sections, in the order they appear: heading, the line under it (each in English and Portuguese), and map pin colour. */
 export const sections = [
   {
     id: 'trails',
     title: 'Urban Trails',
+    titlePt: 'Percursos Urbanos',
     description: 'Trails that start in the city centre or at a metro station, short enough to walk after work.',
+    descriptionPt: 'Percursos que começam no centro da cidade ou numa estação de metro, curtos o suficiente para fazer depois do trabalho.',
     pin: '#2a81cb',
   },
   {
     id: 'limited',
     title: 'Limited availability',
+    titlePt: 'Acesso limitado',
     description: "Places that need a booking or a ticket, or that aren't always open to the public.",
+    descriptionPt: 'Locais que precisam de marcação ou de bilhete, ou que nem sempre estão abertos ao público.',
     pin: '#e07b24',
   },
   {
     id: 'outside',
     title: 'Outside trails',
+    titlePt: 'Percursos mais longe',
     description:
       "Trails beyond Porto's neighbouring municipalities, or ones you can reach by public transport but that take more effort to get to.",
+    descriptionPt:
+      'Percursos para lá dos concelhos vizinhos do Porto, ou a que se chega de transportes públicos mas com mais esforço.',
     pin: '#3a9a4a',
   },
 ] as const;
@@ -42,6 +51,8 @@ export type Area = (typeof areas)[number];
 export type Trail = {
   id: string;
   name: string;
+  /** Portuguese name; leave out to use the English one. Start and end are translated through placesPt below. */
+  namePt?: string;
   /** Leave out until known; the card shows "—". */
   start?: string;
   /** Where the trail ends; leave out for a circular trail. */
@@ -95,6 +106,7 @@ const allTrails: Trail[] = [
   {
     id: 'hills-of-porto',
     name: 'The Hills of Porto',
+    namePt: 'As Colinas do Porto',
     area: 'Porto',
     start: 'Carolina Michaëlis metro station',
     end: 'Campanhã metro station',
@@ -104,6 +116,7 @@ const allTrails: Trail[] = [
   {
     id: 'hillside-of-valbom',
     name: 'The Hillside of Valbom',
+    namePt: 'A Encosta de Valbom',
     area: 'Gondomar',
     start: 'Campanhã metro station',
     circular: true,
@@ -113,6 +126,7 @@ const allTrails: Trail[] = [
   {
     id: 'former-line-of-alfandega',
     name: 'The Old Alfândega Railway',
+    namePt: 'O Antigo Ramal da Alfândega',
     area: 'Porto',
     start: 'Miradouro das Fontaínhas',
     end: 'Campanhã metro station',
@@ -122,6 +136,7 @@ const allTrails: Trail[] = [
   {
     id: 'leca-river-missing-trail',
     name: 'The Missing Leça River Trail',
+    namePt: 'O Trilho Perdido do Rio Leça',
     area: 'Matosinhos',
     start: 'Esposade metro station',
     end: 'Senhor de Matosinhos metro station',
@@ -131,6 +146,7 @@ const allTrails: Trail[] = [
   {
     id: 'rio-febros-trail',
     name: 'The Febros River Trail',
+    namePt: 'O Percurso do Rio Febros',
     area: 'Gaia',
     start: 'Ponte Luiz I',
     end: 'Parque Biológico de Gaia',
@@ -140,6 +156,7 @@ const allTrails: Trail[] = [
   {
     id: 'azevedo-yellow-walk',
     name: 'Azevedo and the Yellow Walk',
+    namePt: 'Azevedo e o Passeio Amarelo',
     area: 'Porto',
     start: 'Campanhã metro station',
     circular: true,
@@ -149,6 +166,7 @@ const allTrails: Trail[] = [
   {
     id: 'azevedo-old-paths',
     name: 'Azevedo and the Old Paths',
+    namePt: 'Azevedo e os Caminhos Antigos',
     area: 'Porto',
     start: 'Campanhã metro station',
     circular: true,
@@ -158,6 +176,7 @@ const allTrails: Trail[] = [
   {
     id: 'lipor-hill',
     name: 'LIPOR Hill',
+    namePt: 'Monte da LIPOR',
     area: 'Maia',
     start: 'Palmilheira train station',
     circular: true,
@@ -176,6 +195,7 @@ const allTrails: Trail[] = [
   {
     id: 'avioso-park',
     name: 'Avioso Park',
+    namePt: 'Parque de Avioso',
     area: 'Maia',
     start: 'ISMAI metro station',
     circular: true,
@@ -185,6 +205,7 @@ const allTrails: Trail[] = [
   {
     id: 'fields-of-foz',
     name: 'The Fields of Foz',
+    namePt: 'Os Campos da Foz',
     area: 'Porto',
     start: 'Praça do Império metrobus station',
     circular: true,
@@ -193,7 +214,8 @@ const allTrails: Trail[] = [
   },
   {
     id: 'tgv-could-have-been',
-    name: 'The TGV That Could Have Been',
+    name: 'The Laborim Allotments',
+    namePt: 'Hortas de Laborim',
     area: 'Gaia',
     start: 'Manuel Leão metro station',
     end: 'Santo Ovídio metro station',
@@ -203,6 +225,7 @@ const allTrails: Trail[] = [
   {
     id: 'archeira-ribeira-and-the-woods',
     name: 'Archeira Ribeira and the Woods',
+    namePt: 'A Ribeira da Archeira e os Bosques',
     area: 'Gondomar',
     start: 'Gondomar (Souto) bus station',
     end: 'Campanhã metro station',
@@ -212,6 +235,7 @@ const allTrails: Trail[] = [
   {
     id: 'mount-castro-and-river-torto',
     name: 'Mount Castro and the Torto River',
+    namePt: 'O Monte Castro e o Rio Torto',
     area: 'Gondomar',
     start: 'Fânzeres metro station',
     end: 'Gondomar (Souto) bus station',
@@ -221,6 +245,7 @@ const allTrails: Trail[] = [
   {
     id: 'quebrantoes-paths',
     name: 'The Quebrantões Paths',
+    namePt: 'Os Caminhos de Quebrantões',
     area: 'Gaia',
     start: 'Miradouro das Fontaínhas',
     end: 'Jardim do Morro metro station',
@@ -230,6 +255,7 @@ const allTrails: Trail[] = [
   {
     id: 'romantic-path',
     name: 'Romantic Path',
+    namePt: 'Caminho Romântico',
     area: 'Porto',
     start: 'Boavista metro station',
     end: 'Douro River',
@@ -271,6 +297,7 @@ const allTrails: Trail[] = [
   {
     id: 'biological-park',
     name: 'Gaia Biological Park',
+    namePt: 'Parque Biológico de Gaia',
     area: 'Gaia',
     start: 'D. João II metro station',
     circular: true,
@@ -281,6 +308,7 @@ const allTrails: Trail[] = [
   {
     id: 'leca-quinta-da-conceicao',
     name: 'Leça Quinta da Conceição',
+    namePt: 'Quinta da Conceição, Leça',
     area: 'Matosinhos',
     start: 'Mercado (Matosinhos) metro station',
     circular: true,
@@ -293,6 +321,7 @@ const allTrails: Trail[] = [
   {
     id: 'canelas-mountain',
     name: 'Canelas Mountain',
+    namePt: 'Serra de Canelas',
     area: 'Gaia',
     start: 'UNIR bus (N1)',
     circular: true,
@@ -303,6 +332,7 @@ const allTrails: Trail[] = [
   {
     id: 'jancido-mills',
     name: 'Jancido Mills',
+    namePt: 'Moinhos de Jancido',
     area: 'Gondomar',
     start: 'UNIR bus (Ribeira, Foz do Sousa)',
     circular: true,
@@ -313,6 +343,7 @@ const allTrails: Trail[] = [
   {
     id: 'alvura-park',
     name: 'Alvura Park',
+    namePt: 'Parque da Alvura',
     area: 'Maia',
     start: 'STCP 7',
     circular: true,
@@ -323,6 +354,7 @@ const allTrails: Trail[] = [
   {
     id: 'north-of-river-leca',
     name: 'North of the Leça River',
+    namePt: 'A Norte do Rio Leça',
     area: 'Matosinhos',
     start: 'UNIR bus (Monte Xisto)',
     circular: true,
@@ -343,6 +375,7 @@ const allTrails: Trail[] = [
   {
     id: 'trofa-riverside',
     name: 'Trofa Riverside',
+    namePt: 'Trofa Ribeirinha',
     area: 'Trofa',
     start: 'Trofa train station',
     circular: true,
@@ -353,6 +386,7 @@ const allTrails: Trail[] = [
   {
     id: 'valongo-trails',
     name: 'Valongo Trails',
+    namePt: 'Trilhos de Valongo',
     area: 'Valongo',
     start: 'Valongo train station',
     circular: true,
@@ -373,6 +407,7 @@ const allTrails: Trail[] = [
   {
     id: 'rio-uima',
     name: 'The Uíma River',
+    namePt: 'O Rio Uíma',
     area: 'Santa Maria da Feira',
     start: 'UNIR bus (N326)',
     circular: true,
@@ -393,6 +428,7 @@ const allTrails: Trail[] = [
   {
     id: 'midoes-shale-village',
     name: 'Midões Shale Village',
+    namePt: 'Aldeia de Xisto de Midões',
     area: 'Gondomar',
     hidden: true,
     circular: true,
@@ -403,6 +439,7 @@ const allTrails: Trail[] = [
   {
     id: 'esmoriz-wooden-steps',
     name: 'Esmoriz Wooden Steps',
+    namePt: 'Passadiços de Esmoriz',
     area: 'Ovar',
     start: 'Esmoriz train station',
     circular: true,
@@ -414,3 +451,51 @@ const allTrails: Trail[] = [
 
 /** What the page and map show: every trail not marked hidden. */
 export const trails = allTrails.filter((t) => !t.hidden);
+
+/** Portuguese for every start and end above. A place missing here shows in English. */
+const placesPt: Record<string, string> = {
+  'Boavista metro station': 'Estação de metro da Boavista',
+  'Campanhã metro station': 'Estação de metro de Campanhã',
+  'Carolina Michaëlis metro station': 'Estação de metro Carolina Michaëlis',
+  'Cete train station': 'Estação de comboios de Cete',
+  'D. João II metro station': 'Estação de metro D. João II',
+  'Douro River': 'Rio Douro',
+  'Esmoriz train station': 'Estação de comboios de Esmoriz',
+  'Esposade metro station': 'Estação de metro de Esposade',
+  'Estádio do Dragão metro station': 'Estação de metro Estádio do Dragão',
+  'Fânzeres metro station': 'Estação de metro de Fânzeres',
+  'Gondomar (Souto) bus station': 'Estação de autocarros de Gondomar (Souto)',
+  'ISMAI metro station': 'Estação de metro ISMAI',
+  'Jardim do Morro metro station': 'Estação de metro Jardim do Morro',
+  'Manuel Leão metro station': 'Estação de metro Manuel Leão',
+  'Mercado (Matosinhos) metro station': 'Estação de metro Mercado (Matosinhos)',
+  'Palmilheira train station': 'Estação de comboios da Palmilheira',
+  'Parque Maia metro station': 'Estação de metro Parque Maia',
+  'Praça do Império metrobus station': 'Paragem de metrobus Praça do Império',
+  'Santo Ovídio metro station': 'Estação de metro Santo Ovídio',
+  'Senhor de Matosinhos metro station': 'Estação de metro Senhor de Matosinhos',
+  'Trindade metro station': 'Estação de metro da Trindade',
+  'Trofa train station': 'Estação de comboios da Trofa',
+  'UNIR bus (Monte Xisto)': 'Autocarro UNIR (Monte Xisto)',
+  'UNIR bus (N1)': 'Autocarro UNIR (N1)',
+  'UNIR bus (N326)': 'Autocarro UNIR (N326)',
+  'UNIR bus (Ribeira, Foz do Sousa)': 'Autocarro UNIR (Ribeira, Foz do Sousa)',
+  'Valongo train station': 'Estação de comboios de Valongo',
+};
+
+/** A trail's name, start and end in the given language. */
+export function trailText(trail: Trail, lang: Lang) {
+  const place = (s?: string) => (s && lang === 'pt' ? (placesPt[s] ?? s) : s);
+  return {
+    name: lang === 'pt' ? (trail.namePt ?? trail.name) : trail.name,
+    start: place(trail.start),
+    end: place(trail.end),
+  };
+}
+
+/** A section's heading and description in the given language. */
+export function sectionText(section: (typeof sections)[number], lang: Lang) {
+  return lang === 'pt'
+    ? { title: section.titlePt, description: section.descriptionPt }
+    : { title: section.title, description: section.description };
+}

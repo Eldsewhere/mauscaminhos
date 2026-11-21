@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { photosFor } from '../data/photos';
 import { PhotoViewer } from './PhotoViewer';
-import type { Trail } from '../data/trails';
+import { trailText, type Trail } from '../data/trails';
+import { useLang } from '../i18n/context';
 
 const SHOW_LANDMARKS = false;
 
@@ -15,11 +16,12 @@ function PhotoSlider({ photos, name }: { photos: string[]; name: string }) {
   // Each page load starts on a random photo; the arrows still go through all of them in order.
   const [index, setIndex] = useState(() => Math.floor(Math.random() * photos.length));
   const [viewing, setViewing] = useState(false);
+  const { t } = useLang();
 
   if (!photos.length) {
     return (
       <div className="trail-photo">
-        <span className="trail-photo-empty">Photo coming soon</span>
+        <span className="trail-photo-empty">{t.photoComingSoon}</span>
       </div>
     );
   }
@@ -28,18 +30,18 @@ function PhotoSlider({ photos, name }: { photos: string[]; name: string }) {
 
   return (
     <div className="trail-photo">
-      <button type="button" className="photo-open" aria-label={`Open ${name} photos`} onClick={() => setViewing(true)}>
-        <img src={photos[index]} alt={`${name}, photo ${index + 1} of ${photos.length}`} loading="lazy" />
+      <button type="button" className="photo-open" aria-label={t.openPhotos(name)} onClick={() => setViewing(true)}>
+        <img src={photos[index]} alt={t.photoAlt(name, index + 1, photos.length)} loading="lazy" />
       </button>
       {viewing && (
         <PhotoViewer photos={photos} index={index} name={name} onStep={step} onClose={() => setViewing(false)} />
       )}
       {photos.length > 1 && (
         <>
-          <button type="button" className="photo-nav prev" aria-label="Previous photo" onClick={() => step(-1)}>
+          <button type="button" className="photo-nav prev" aria-label={t.previousPhoto} onClick={() => step(-1)}>
             ‹
           </button>
-          <button type="button" className="photo-nav next" aria-label="Next photo" onClick={() => step(1)}>
+          <button type="button" className="photo-nav next" aria-label={t.nextPhoto} onClick={() => step(1)}>
             ›
           </button>
           <span className="photo-count">
@@ -52,30 +54,32 @@ function PhotoSlider({ photos, name }: { photos: string[]; name: string }) {
 }
 
 export function TrailCard({ trail, selected, onSelect }: Props) {
+  const { lang, t } = useLang();
+  const text = trailText(trail, lang);
   return (
     <article id={`trail-${trail.id}`} className={selected ? 'trail-card selected' : 'trail-card'}>
-      <PhotoSlider photos={photosFor(trail.id)} name={trail.name} />
+      <PhotoSlider photos={photosFor(trail.id)} name={text.name} />
       <button type="button" className="trail-card-button" onClick={() => onSelect(trail.id)}>
         <div className="trail-body">
-          <h4>{trail.name}</h4>
+          <h4>{text.name}</h4>
           <dl>
-            <dt>Start</dt>
-            <dd>{trail.start ?? '—'}</dd>
+            <dt>{t.start}</dt>
+            <dd>{text.start ?? '—'}</dd>
             {trail.circular ? (
               <>
-                <dt>Route</dt>
-                <dd>Circular</dd>
+                <dt>{t.route}</dt>
+                <dd>{t.circular}</dd>
               </>
             ) : (
               <>
-                <dt>End</dt>
-                <dd>{trail.end ?? '—'}</dd>
+                <dt>{t.end}</dt>
+                <dd>{text.end ?? '—'}</dd>
               </>
             )}
             {/* Landmarks are hidden for now; set SHOW_LANDMARKS to true to bring them back. */}
             {SHOW_LANDMARKS && (
               <>
-                <dt>Landmarks</dt>
+                <dt>{t.landmarks}</dt>
                 <dd>{trail.landmarks.length ? trail.landmarks.join(', ') : '—'}</dd>
               </>
             )}
