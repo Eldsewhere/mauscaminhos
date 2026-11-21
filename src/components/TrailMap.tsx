@@ -6,7 +6,9 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { sectionText, sections, trailText, type SectionId, type Trail } from '../data/trails';
+import { operatorOf } from '../data/transport';
 import { useLang } from '../i18n/context';
+import { TransportBadge } from './TransportBadge';
 
 const pinIcon = L.icon({
   iconUrl: markerIcon,
@@ -131,7 +133,8 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
             <div className="pin-popup">
               {pin.trails[0].start && (
                 <div className="pin-popup-start">
-                  {t.start}: {trailText(pin.trails[0], lang).start}
+                  {t.start}: <TransportBadge operator={operatorOf(pin.trails[0].start)} />
+                  {trailText(pin.trails[0], lang).start}
                 </div>
               )}
               {pin.trails[0].section && (

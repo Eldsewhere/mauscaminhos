@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { photosFor } from '../data/photos';
 import { PhotoViewer } from './PhotoViewer';
 import { trailText, type Trail } from '../data/trails';
+import { operatorOf } from '../data/transport';
 import { useLang } from '../i18n/context';
+import { TransportBadge } from './TransportBadge';
 
 const SHOW_LANDMARKS = false;
 
@@ -64,7 +66,10 @@ export function TrailCard({ trail, selected, onSelect }: Props) {
           <h4>{text.name}</h4>
           <dl>
             <dt>{t.start}</dt>
-            <dd>{text.start ?? '—'}</dd>
+            <dd>
+              <TransportBadge operator={operatorOf(trail.start)} />
+              {text.start ?? '—'}
+            </dd>
             {trail.circular ? (
               <>
                 <dt>{t.route}</dt>
@@ -73,7 +78,10 @@ export function TrailCard({ trail, selected, onSelect }: Props) {
             ) : (
               <>
                 <dt>{t.end}</dt>
-                <dd>{text.end ?? '—'}</dd>
+                <dd>
+                  <TransportBadge operator={operatorOf(trail.end)} />
+                  {text.end ?? '—'}
+                </dd>
               </>
             )}
             {/* Landmarks are hidden for now; set SHOW_LANDMARKS to true to bring them back. */}

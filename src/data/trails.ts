@@ -1,3 +1,4 @@
+import { operatorOf, stopName } from './transport';
 import type { Lang } from '../i18n/strings';
 
 /** The page sections, in the order they appear: heading, the line under it (each in English and Portuguese), and map pin colour. */
@@ -452,40 +453,18 @@ const allTrails: Trail[] = [
 /** What the page and map show: every trail not marked hidden. */
 export const trails = allTrails.filter((t) => !t.hidden);
 
-/** Portuguese for every start and end above. A place missing here shows in English. */
+/** Portuguese for starts and ends that aren't stops (stops show their bare name next to a badge). A place missing here shows in English. */
 const placesPt: Record<string, string> = {
-  'Boavista metro station': 'Estação de metro da Boavista',
-  'Campanhã metro station': 'Estação de metro de Campanhã',
-  'Carolina Michaëlis metro station': 'Estação de metro Carolina Michaëlis',
-  'Cete train station': 'Estação de comboios de Cete',
-  'D. João II metro station': 'Estação de metro D. João II',
   'Douro River': 'Rio Douro',
-  'Esmoriz train station': 'Estação de comboios de Esmoriz',
-  'Esposade metro station': 'Estação de metro de Esposade',
-  'Estádio do Dragão metro station': 'Estação de metro Estádio do Dragão',
-  'Fânzeres metro station': 'Estação de metro de Fânzeres',
-  'Gondomar (Souto) bus station': 'Estação de autocarros de Gondomar (Souto)',
-  'ISMAI metro station': 'Estação de metro ISMAI',
-  'Jardim do Morro metro station': 'Estação de metro Jardim do Morro',
-  'Manuel Leão metro station': 'Estação de metro Manuel Leão',
-  'Mercado (Matosinhos) metro station': 'Estação de metro Mercado (Matosinhos)',
-  'Palmilheira train station': 'Estação de comboios da Palmilheira',
-  'Parque Maia metro station': 'Estação de metro Parque Maia',
-  'Praça do Império metrobus station': 'Paragem de metrobus Praça do Império',
-  'Santo Ovídio metro station': 'Estação de metro Santo Ovídio',
-  'Senhor de Matosinhos metro station': 'Estação de metro Senhor de Matosinhos',
-  'Trindade metro station': 'Estação de metro da Trindade',
-  'Trofa train station': 'Estação de comboios da Trofa',
-  'UNIR bus (Monte Xisto)': 'Autocarro UNIR (Monte Xisto)',
-  'UNIR bus (N1)': 'Autocarro UNIR (N1)',
-  'UNIR bus (N326)': 'Autocarro UNIR (N326)',
-  'UNIR bus (Ribeira, Foz do Sousa)': 'Autocarro UNIR (Ribeira, Foz do Sousa)',
-  'Valongo train station': 'Estação de comboios de Valongo',
 };
 
 /** A trail's name, start and end in the given language. */
 export function trailText(trail: Trail, lang: Lang) {
-  const place = (s?: string) => (s && lang === 'pt' ? (placesPt[s] ?? s) : s);
+  const place = (s?: string) => {
+    if (!s) return s;
+    if (operatorOf(s)) return stopName(s);
+    return lang === 'pt' ? (placesPt[s] ?? s) : s;
+  };
   return {
     name: lang === 'pt' ? (trail.namePt ?? trail.name) : trail.name,
     start: place(trail.start),

@@ -125,6 +125,9 @@ h2 {
 }
 
 .pin-popup-start {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   color: #5d6b70;
   margin-bottom: 2px;
 }
@@ -356,6 +359,9 @@ h2 {
 }
 
 .trail-body dd {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
   margin: 0;
 }
 
@@ -387,4 +393,40 @@ h2 {
   flex: 1;
   height: 1px;
   background: var(--border);
+}
+
+/* Operator badge before a start or end point (Metro, CP, STCP, UNIR). */
+.transport-badge {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: 3px;
+  padding: 2px 6px 2px 4px;
+  border-radius: 999px;
+  font-size: 0.72em;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+.transport-badge svg {
+  flex: none;
+  color: #fff;
+}
+
+.transport-badge svg [fill='var(--surface)'] {
+  fill: var(--badge-bg);
+}
+
+.transport-metro { --badge-bg: #1d5f8a; background: var(--badge-bg); }
+.transport-cp { --badge-bg: #3a7d44; background: var(--badge-bg); }
+.transport-stcp { --badge-bg: #b23a3a; background: var(--badge-bg); }
+.transport-unir { --badge-bg: #6b4fa0; background: var(--badge-bg); }
+.transport-bus { --badge-bg: #5d6b70; background: var(--badge-bg); padding-right: 4px; }
+
+/* In a card, centre the badge on the first line of text, so it stays put when a name wraps. */
+.trail-body dd .transport-badge {
+  height: 18px;
+  margin-top: calc((1.5 * 0.92rem - 18px) / 2);
 }
