@@ -88,6 +88,7 @@ const CETE_STATION: [number, number] = [41.17151, -8.35543]; // Cete train stati
 const RIO_UIMA: [number, number] = [40.9764, -8.50552]; // Parque das Ribeiras do Uíma, Lobão, Santa Maria da Feira
 const FERVENCA: [number, number] = [41.35347, -8.58198]; // Fervença, Ribeirão (Famalicão), just north of Trofa
 const MIDOES: [number, number] = [41.11397, -8.4742]; // Midões hamlet, Foz do Sousa e Covelo, Gondomar
+const BOAVISTA: [number, number] = [41.15897, -8.62927]; // Rotunda da Boavista (Casa da Música metro), Porto
 const ESMORIZ_STATION: [number, number] = [40.95785, -8.62714]; // Esmoriz train station, Ovar, near the Barrinha de Esmoriz boardwalks
 
 const allTrails: Trail[] = [
@@ -230,7 +231,10 @@ const allTrails: Trail[] = [
     id: 'romantic-path',
     name: 'Romantic Path',
     area: 'Porto',
+    start: 'Boavista metro station',
+    end: 'Douro River',
     landmarks: [],
+    position: BOAVISTA,
   },
 
   // Limited availability
