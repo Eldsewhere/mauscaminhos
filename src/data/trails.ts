@@ -226,6 +226,12 @@ const allTrails: Trail[] = [
     landmarks: [],
     position: FONTAINHAS,
   },
+  {
+    id: 'romantic-path',
+    name: 'Romantic Path',
+    area: 'Porto',
+    landmarks: [],
+  },
 
   // Limited availability
   {
