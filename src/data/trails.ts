@@ -16,6 +16,7 @@ export const areas = [
   'Paredes',
   'Santa Maria da Feira',
   'Ovar',
+  'Vizela',
 ] as const;
 
 export type Area = (typeof areas)[number];
@@ -75,6 +76,7 @@ const FERVENCA: [number, number] = [41.35347, -8.58198]; // Fervença, Ribeirão
 const MIDOES: [number, number] = [41.11397, -8.4742]; // Midões hamlet, Foz do Sousa e Covelo, Gondomar
 const BOAVISTA: [number, number] = [41.15897, -8.62927]; // Rotunda da Boavista (Casa da Música metro), Porto
 const ESMORIZ_STATION: [number, number] = [40.95785, -8.62714]; // Esmoriz train station, Ovar, near the Barrinha de Esmoriz boardwalks
+const VIZELA_STATION: [number, number] = [41.37909, -8.31237]; // Vizela train station, Caldas de Vizela
 
 const allTrails: Trail[] = [
   {
@@ -422,6 +424,16 @@ const allTrails: Trail[] = [
     landmarks: [],
     position: ESMORIZ_STATION,
     outer: true,
+  },
+  {
+    id: 'vizela-wooden-steps',
+    name: 'Vizela Wooden Steps',
+    namePt: 'Passadiços de Vizela',
+    area: 'Vizela',
+    start: 'Vizela train station',
+    circular: true,
+    landmarks: [],
+    position: VIZELA_STATION,
   },
 ];
 
