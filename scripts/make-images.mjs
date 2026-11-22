@@ -46,7 +46,7 @@ async function shareImage() {
       <rect width="${W}" height="${H}" fill="url(#shade)"/>
       <text x="236" y="128" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="84" font-weight="700" fill="#fff">Maus Caminhos</text>
       <text x="240" y="186" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="40" fill="#fff" fill-opacity="0.92">Walking trails in and around Porto</text>
-      <text x="72" y="580" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="30" fill="#fff" fill-opacity="0.9">Urban trails · Limited availability · Outside trails</text>
+      <text x="72" y="580" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="30" fill="#fff" fill-opacity="0.9">Urban walks and trails further out</text>
     </svg>`);
   await sharp(photo)
     .composite([

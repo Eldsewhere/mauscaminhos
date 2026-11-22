@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import { sectionText, sections, trailText, type SectionId, type Trail } from '../data/trails';
+import { OUTER_PIN, trailText, type Trail } from '../data/trails';
 import { operatorOf } from '../data/transport';
 import { useLang } from '../i18n/context';
 import { TransportBadge } from './TransportBadge';
@@ -36,14 +36,8 @@ const colouredPin = (colour: string) =>
     tooltipAnchor: [14, -28],
   });
 
-/** Main trails keep Leaflet's blue pin; other sections get their own colour. */
-const pinIcons: Record<SectionId, L.Icon | L.DivIcon> = {
-  trails: pinIcon,
-  limited: colouredPin(sections[1].pin),
-  outside: colouredPin(sections[2].pin),
-};
-
-const sectionOf = (t: Trail): SectionId => t.section ?? 'trails';
+/** Trails keep Leaflet's blue pin; outer trails get a green one. */
+const outerPinIcon = colouredPin(OUTER_PIN);
 
 type Props = {
   trails: Trail[];
@@ -98,7 +92,6 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
   const showLabels = zoom >= LABEL_ZOOM;
   const { lang, t } = useLang();
   const name = (trail: Trail) => trailText(trail, lang).name;
-  const sectionTitle = (id: SectionId) => sectionText(sections.find((s) => s.id === id)!, lang).title;
 
   useEffect(() => {
     if (selected?.position) markers.current[selected.position.join(',')]?.openPopup();
@@ -114,7 +107,7 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
         <Marker
           key={pin.key}
           position={pin.position}
-          icon={pinIcons[sectionOf(pin.trails[0])]}
+          icon={pin.trails[0].outer ? outerPinIcon : pinIcon}
           ref={(m) => {
             markers.current[pin.key] = m;
           }}
@@ -137,9 +130,6 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
                   {trailText(pin.trails[0], lang).start}
                 </div>
               )}
-              {pin.trails[0].section && (
-                <div className="pin-popup-start">{sectionTitle(pin.trails[0].section)}</div>
-              )}
               {pin.trails.map((trail) => (
                 <button
                   key={trail.id}
@@ -148,6 +138,9 @@ export function TrailMap({ trails, selectedId, onSelect }: Props) {
                   onClick={() => onSelect(trail.id)}
                 >
                   {name(trail)}
+                  {trail.circular && <span className="trail-badge circular-badge">{t.circular}</span>}
+                  {trail.outer && <span className="trail-badge outer-badge">{t.outer}</span>}
+                  {trail.limited && <span className="trail-badge limited-badge">{t.limited}</span>}
                 </button>
               ))}
             </div>

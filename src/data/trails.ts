@@ -1,39 +1,10 @@
 import { operatorOf, stopName } from './transport';
 import type { Lang } from '../i18n/strings';
 
-/** The page sections, in the order they appear: heading, the line under it (each in English and Portuguese), and map pin colour. */
-export const sections = [
-  {
-    id: 'trails',
-    title: 'Urban Trails',
-    titlePt: 'Percursos Urbanos',
-    description: 'Trails that start in the city centre or at a metro station, short enough to walk after work.',
-    descriptionPt: 'Percursos que começam no centro da cidade ou numa estação de metro, curtos o suficiente para fazer depois do trabalho.',
-    pin: '#2a81cb',
-  },
-  {
-    id: 'limited',
-    title: 'Limited availability',
-    titlePt: 'Acesso limitado',
-    description: "Places that need a booking or a ticket, or that aren't always open to the public.",
-    descriptionPt: 'Locais que precisam de marcação ou de bilhete, ou que nem sempre estão abertos ao público.',
-    pin: '#e07b24',
-  },
-  {
-    id: 'outside',
-    title: 'Outside trails',
-    titlePt: 'Percursos mais longe',
-    description:
-      "Trails beyond Porto's neighbouring municipalities, or ones you can reach by public transport but that take more effort to get to.",
-    descriptionPt:
-      'Percursos para lá dos concelhos vizinhos do Porto, ou a que se chega de transportes públicos mas com mais esforço.',
-    pin: '#3a9a4a',
-  },
-] as const;
+/** Map pin colour for outer trails (other trails keep Leaflet's blue pin); the "Outer trail" badge uses it too. */
+export const OUTER_PIN = '#3a9a4a';
 
-export type SectionId = (typeof sections)[number]['id'];
-
-/** Location subsections (Trails and Outside trails), in the order they appear. Empty ones are skipped. */
+/** Location subsections, in the order they appear. Empty ones are skipped. */
 export const areas = [
   'Porto',
   'Matosinhos',
@@ -66,16 +37,18 @@ export type Trail = {
   area?: Area;
   /** true keeps the trail (and its photos) in the data but leaves it off the page and map. */
   hidden?: boolean;
-  /** Which section it's listed in; leave out for "Urban Trails". */
-  section?: SectionId;
+  /** true for trails further out (beyond Porto's neighbouring municipalities, or harder to reach by public transport); the card and map popup show an "Outer trail" badge and the pin is green. */
+  outer?: boolean;
+  /** true for places that need a booking or a ticket, or aren't always open; the card and map popup show a "Limited access" badge. */
+  limited?: boolean;
 };
 
 // Start-point coordinates, from OpenStreetMap.
 const CAMPANHA: [number, number] = [41.15073, -8.58564];
 const CAROLINA_MICHAELIS: [number, number] = [41.15856, -8.6219];
-const FONTAINHAS: [number, number] = [41.14256, -8.60091];
+const HEROISMO: [number, number] = [41.14652, -8.59304];
 const ESPOSADE: [number, number] = [41.21603, -8.65456];
-const PONTE_LUIZ_I: [number, number] = [41.13966, -8.60935];
+const SAO_BENTO: [number, number] = [41.14469, -8.61079]; // São Bento metro station, Porto
 const PALMILHEIRA: [number, number] = [41.20226, -8.5569];
 const PARQUE_MAIA: [number, number] = [41.22913, -8.62658];
 const ISMAI: [number, number] = [41.26886, -8.61543];
@@ -129,10 +102,10 @@ const allTrails: Trail[] = [
     name: 'The Old Alfândega Railway',
     namePt: 'O Antigo Ramal da Alfândega',
     area: 'Porto',
-    start: 'Miradouro das Fontaínhas',
+    start: 'Heroísmo metro station',
     end: 'Campanhã metro station',
     landmarks: [],
-    position: FONTAINHAS,
+    position: HEROISMO,
   },
   {
     id: 'leca-river-missing-trail',
@@ -143,16 +116,18 @@ const allTrails: Trail[] = [
     end: 'Senhor de Matosinhos metro station',
     landmarks: [],
     position: ESPOSADE,
+    outer: true,
   },
   {
     id: 'rio-febros-trail',
     name: 'The Febros River Trail',
     namePt: 'O Percurso do Rio Febros',
     area: 'Gaia',
-    start: 'Ponte Luiz I',
-    end: 'Parque Biológico de Gaia',
+    start: 'São Bento metro station',
+    end: 'UNIR bus (Parque Biológico de Gaia)',
     landmarks: [],
-    position: PONTE_LUIZ_I,
+    position: SAO_BENTO,
+    outer: true,
   },
   {
     id: 'azevedo-yellow-walk',
@@ -248,10 +223,10 @@ const allTrails: Trail[] = [
     name: 'The Quebrantões Paths',
     namePt: 'Os Caminhos de Quebrantões',
     area: 'Gaia',
-    start: 'Miradouro das Fontaínhas',
+    start: 'Heroísmo metro station',
     end: 'Jardim do Morro metro station',
     landmarks: [],
-    position: FONTAINHAS,
+    position: HEROISMO,
   },
   {
     id: 'romantic-path',
@@ -259,12 +234,12 @@ const allTrails: Trail[] = [
     namePt: 'Caminho Romântico',
     area: 'Porto',
     start: 'Boavista metro station',
-    end: 'Douro River',
+    end: 'STCP 500',
     landmarks: [],
     position: BOAVISTA,
   },
 
-  // Limited availability
+  // Limited access (listed with the urban trails, with a badge)
   {
     id: 'hortas-do-musas',
     name: 'Hortas do Musas',
@@ -273,7 +248,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: MUSAS,
-    section: 'limited',
+    limited: true,
   },
   {
     id: 'quinta-dos-salgueiros',
@@ -283,7 +258,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: QUINTA_SALGUEIROS,
-    section: 'limited',
+    limited: true,
   },
   {
     id: 'villar-d-allen',
@@ -293,7 +268,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: VILLAR_D_ALLEN,
-    section: 'limited',
+    limited: true,
   },
   {
     id: 'biological-park',
@@ -304,7 +279,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: PARQUE_BIOLOGICO,
-    section: 'limited',
+    limited: true,
   },
   {
     id: 'leca-quinta-da-conceicao',
@@ -315,10 +290,10 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: QUINTA_CONCEICAO,
-    section: 'limited',
+    limited: true,
   },
 
-  // Outside trails
+  // Outer trails (further out; shown with an "Outer trail" badge and a green pin)
   {
     id: 'canelas-mountain',
     name: 'Canelas Mountain',
@@ -328,7 +303,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: SERRA_DE_CANELAS,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'jancido-mills',
@@ -339,7 +314,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: MOINHOS_DE_JANCIDO,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'alvura-park',
@@ -350,7 +325,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: ALVURA_PARK,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'north-of-river-leca',
@@ -361,7 +336,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: MONTE_XISTO,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'sanatorio-valongo',
@@ -371,7 +346,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: SANATORIO_VALONGO,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'trofa-riverside',
@@ -382,7 +357,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: TROFA_RIVERSIDE,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'valongo-trails',
@@ -393,7 +368,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: VALONGO_STATION,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'cete',
@@ -403,7 +378,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: CETE_STATION,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'rio-uima',
@@ -414,7 +389,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: RIO_UIMA,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'trofa-fervenca',
@@ -424,7 +399,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: FERVENCA,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'midoes-shale-village',
@@ -435,7 +410,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: MIDOES,
-    section: 'outside',
+    outer: true,
   },
   {
     id: 'esmoriz-wooden-steps',
@@ -446,7 +421,7 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: ESMORIZ_STATION,
-    section: 'outside',
+    outer: true,
   },
 ];
 
@@ -455,7 +430,6 @@ export const trails = allTrails.filter((t) => !t.hidden);
 
 /** Portuguese for starts and ends that aren't stops (stops show their bare name next to a badge). A place missing here shows in English. */
 const placesPt: Record<string, string> = {
-  'Douro River': 'Rio Douro',
 };
 
 /** A trail's name, start and end in the given language. */
@@ -470,11 +444,4 @@ export function trailText(trail: Trail, lang: Lang) {
     start: place(trail.start),
     end: place(trail.end),
   };
-}
-
-/** A section's heading and description in the given language. */
-export function sectionText(section: (typeof sections)[number], lang: Lang) {
-  return lang === 'pt'
-    ? { title: section.titlePt, description: section.descriptionPt }
-    : { title: section.title, description: section.description };
 }

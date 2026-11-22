@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { TrailCard } from './components/TrailCard';
 import { LanguageSwitch } from './components/LanguageSwitch';
 import { TrailMap } from './components/TrailMap';
-import { areas, sectionText, sections, trails, type Trail } from './data/trails';
+import { areas, trails, type Trail } from './data/trails';
 import { useLang } from './i18n/context';
 import './App.css';
 
 export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const { lang, t } = useLang();
+  const { t } = useLang();
 
   // Picking a trail on the map scrolls its card into view.
   const selectFromMap = (id: string) => {
@@ -24,17 +24,16 @@ export default function App() {
     </div>
   );
 
-  // A section whose trails have an area is split by location (Porto, Matosinhos, ...); others are one grid.
-  const sectionBody = (sectionId: string, list: Trail[]) => {
+  // Trails are split by location (Porto, Matosinhos, ...); any without an area go last.
+  const trailList = (list: Trail[]) => {
     if (!list.length) return <p className="section-empty">{t.comingSoon}</p>;
-    if (!list.some((t) => t.area)) return grid(list);
     const noArea = list.filter((t) => !t.area);
     return (
       <>
         {areas.map((area) => {
           const inArea = list.filter((t) => t.area === area);
           if (!inArea.length) return null;
-          const headingId = `area-${sectionId}-${area.toLowerCase().replace(/\s+/g, '-')}`;
+          const headingId = `area-${area.toLowerCase().replace(/\s+/g, '-')}`;
           return (
             <section key={area} className="area" aria-labelledby={headingId}>
               <h3 id={headingId} className="area-heading">
@@ -75,20 +74,9 @@ export default function App() {
           <TrailMap trails={trails} selectedId={selectedId} onSelect={selectFromMap} />
         </section>
 
-        {sections.map((section) => {
-          const list = trails.filter((trail) => (trail.section ?? 'trails') === section.id);
-          const text = sectionText(section, lang);
-          return (
-            <section key={section.id} aria-labelledby={`${section.id}-heading`}>
-              <h2 id={`${section.id}-heading`}>
-                <span className="section-dot" style={{ background: section.pin }} aria-hidden="true" />
-                {text.title}
-              </h2>
-              <p className="section-description">{text.description}</p>
-              {sectionBody(section.id, list)}
-            </section>
-          );
-        })}
+        <section className="trail-list" aria-label={t.trailsLabel}>
+          {trailList(trails)}
+        </section>
       </main>
     </div>
   );

@@ -61,11 +61,25 @@ export function TrailCard({ trail, selected, onSelect }: Props) {
   return (
     <article id={`trail-${trail.id}`} className={selected ? 'trail-card selected' : 'trail-card'}>
       <PhotoSlider photos={photosFor(trail.id)} name={text.name} />
+      {(trail.outer || trail.limited) && (
+        <div className="trail-badges">
+          {trail.outer && (
+            <span className="trail-badge outer-badge" title={t.outerHint}>
+              {t.outer}
+            </span>
+          )}
+          {trail.limited && (
+            <span className="trail-badge limited-badge" title={t.limitedHint}>
+              {t.limited}
+            </span>
+          )}
+        </div>
+      )}
       <button type="button" className="trail-card-button" onClick={() => onSelect(trail.id)}>
         <div className="trail-body">
           <h4>{text.name}</h4>
           <dl>
-            <dt>{trail.circular ? t.circular : t.start}</dt>
+            <dt>{trail.circular ? <span className="trail-badge circular-badge">{t.circular}</span> : t.start}</dt>
             <dd>
               <TransportBadge operator={operatorOf(trail.start)} />
               {text.start ?? '—'}

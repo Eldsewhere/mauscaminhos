@@ -92,22 +92,6 @@ h2 {
   font-weight: 600;
 }
 
-/* Matches the section's pin colour on the map. */
-.section-dot {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 10px;
-  vertical-align: 2px;
-}
-
-.section-description {
-  margin: -8px 0 18px;
-  max-width: 60ch;
-  color: var(--muted);
-}
-
 .section-empty {
   color: var(--muted);
 }
@@ -144,6 +128,56 @@ h2 {
   text-decoration: underline;
 }
 
+/* "Outer trail" and "Limited access" tags on a card and in a map popup. */
+/* Same size and type as the transport badges (.transport-badge in a card). */
+.trail-badge {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 18px;
+  padding: 0 7px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: calc(0.72 * 0.92rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+
+.circular-badge {
+  background: #2a81cb;
+}
+
+.outer-badge {
+  background: #3a9a4a;
+}
+
+.limited-badge {
+  background: #e07b24;
+}
+
+/* Over the photo's top-right corner; clicks pass through to the photo. */
+.trail-badges {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.trail-badges .trail-badge {
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
+}
+
+.pin-popup-trail .trail-badge {
+  margin-left: 6px;
+}
+
 .trail-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -156,6 +190,7 @@ h2 {
   border-radius: 12px;
   overflow: hidden;
   transition: box-shadow 0.15s, border-color 0.15s;
+  position: relative;
 }
 
 .trail-card:hover {
@@ -355,6 +390,8 @@ h2 {
 }
 
 .trail-body dt {
+  display: flex;
+  align-items: flex-start;
   color: var(--muted);
 }
 
@@ -371,7 +408,11 @@ h2 {
   }
 }
 
-/* Location subsections inside a section (Porto, Matosinhos, ...) */
+.trail-list {
+  margin-top: 32px;
+}
+
+/* Location subsections (Porto, Matosinhos, ...) */
 .area + .area {
   margin-top: 28px;
 }
@@ -425,8 +466,10 @@ h2 {
 .transport-unir { --badge-bg: #6b4fa0; background: var(--badge-bg); }
 .transport-bus { --badge-bg: #5d6b70; background: var(--badge-bg); padding-right: 4px; }
 
-/* In a card, centre the badge on the first line of text, so it stays put when a name wraps. */
-.trail-body dd .transport-badge {
+/* In a card, centre the badge on the first line of text, so it stays put when a name wraps.
+   The Circular badge in the label column gets the same offset, so it lines up with the transport badge beside it. */
+.trail-body dd .transport-badge,
+.trail-body dt .trail-badge {
   height: 18px;
   margin-top: calc((1.5 * 0.92rem - 18px) / 2);
 }
