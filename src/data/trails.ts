@@ -16,6 +16,7 @@ export const areas = [
   "Paredes",
   "Santa Maria da Feira",
   "Ovar",
+  "Estarreja",
   "Vizela",
 ] as const;
 
@@ -33,6 +34,7 @@ export const AREA_COLORS: Record<Area, string> = {
   Paredes: "#8b5a3c",
   "Santa Maria da Feira": "#e06c2b",
   Ovar: "#3fa7d6",
+  Estarreja: "#4f5bbf",
   Vizela: "#5a6f7a",
 };
 
@@ -92,6 +94,7 @@ const MIDOES: [number, number] = [41.11397, -8.4742]; // Midões hamlet, Foz do 
 const BOAVISTA: [number, number] = [41.15897, -8.62927]; // Rotunda da Boavista (Casa da Música metro), Porto
 const ESMORIZ_STATION: [number, number] = [40.95785, -8.62714]; // Esmoriz train station, Ovar, near the Barrinha de Esmoriz boardwalks
 const VIZELA_STATION: [number, number] = [41.37909, -8.31237]; // Vizela train station, Caldas de Vizela
+const SALREU_STATION: [number, number] = [40.72886, -8.56487]; // Salreu train station, Estarreja, for the BioRia trails
 
 const allTrails: Trail[] = [
   {
@@ -449,6 +452,16 @@ const allTrails: Trail[] = [
     circular: true,
     landmarks: [],
     position: VIZELA_STATION,
+  },
+  {
+    id: "bioria",
+    name: "BioRia",
+    area: "Estarreja",
+    start: "Salreu train station",
+    circular: true,
+    landmarks: [],
+    position: SALREU_STATION,
+    outer: true,
   },
 ];
 
