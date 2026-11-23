@@ -21,6 +21,21 @@ export const areas = [
 
 export type Area = (typeof areas)[number];
 
+/** Card colour per municipality: a stripe along the top of the card, a light tint behind its text, and a dot by the section heading. */
+export const AREA_COLORS: Record<Area, string> = {
+  Porto: "#2f6fb0",
+  Matosinhos: "#1f9a9a",
+  Maia: "#d08a1e",
+  Gondomar: "#8a5cc2",
+  Gaia: "#c2453d",
+  Valongo: "#b0457a",
+  Trofa: "#b89a1c",
+  Paredes: "#8b5a3c",
+  "Santa Maria da Feira": "#e06c2b",
+  Ovar: "#3fa7d6",
+  Vizela: "#5a6f7a",
+};
+
 export type Trail = {
   id: string;
   name: string;

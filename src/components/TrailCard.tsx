@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { photosFor } from '../data/photos';
 import { PhotoViewer } from './PhotoViewer';
-import { trailText, type Trail } from '../data/trails';
+import { AREA_COLORS, trailText, type Trail } from '../data/trails';
 import { operatorOf } from '../data/transport';
 import { useLang } from '../i18n/context';
 import { TransportBadge } from './TransportBadge';
@@ -59,7 +59,11 @@ export function TrailCard({ trail, selected, onSelect }: Props) {
   const { lang, t } = useLang();
   const text = trailText(trail, lang);
   return (
-    <article id={`trail-${trail.id}`} className={selected ? 'trail-card selected' : 'trail-card'}>
+    <article
+      id={`trail-${trail.id}`}
+      className={selected ? 'trail-card selected' : 'trail-card'}
+      style={trail.area ? ({ '--area': AREA_COLORS[trail.area] } as CSSProperties) : undefined}
+    >
       <PhotoSlider photos={photosFor(trail.id)} name={text.name} />
       {(trail.outer || trail.limited) && (
         <div className="trail-badges">

@@ -188,9 +188,11 @@ h2 {
   gap: 20px;
 }
 
+/* --area is set per card from AREA_COLORS (src/data/trails.ts); cards without an area stay neutral. */
 .trail-card {
-  background: var(--surface);
+  background: color-mix(in srgb, var(--area, transparent) 14%, var(--surface));
   border: 1px solid var(--border);
+  border-top: 5px solid var(--area, var(--border));
   border-radius: 12px;
   overflow: hidden;
   transition: box-shadow 0.15s, border-color 0.15s;
@@ -431,6 +433,15 @@ h2 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+.area-heading::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  margin-right: -4px;
+  border-radius: 50%;
+  background: var(--area, var(--border));
 }
 
 .area-heading::after {

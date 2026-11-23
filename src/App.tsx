@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { TrailCard } from "./components/TrailCard";
 import { LanguageSwitch } from "./components/LanguageSwitch";
 import { TrailMap } from "./components/TrailMap";
-import { areas, trails, type Trail } from "./data/trails";
+import { AREA_COLORS, areas, trails, type Trail } from "./data/trails";
 import { useLang } from "./i18n/context";
 import "./App.css";
 
@@ -42,7 +42,12 @@ export default function App() {
           if (!inArea.length) return null;
           const headingId = `area-${area.toLowerCase().replace(/\s+/g, "-")}`;
           return (
-            <section key={area} className="area" aria-labelledby={headingId}>
+            <section
+              key={area}
+              className="area"
+              aria-labelledby={headingId}
+              style={{ "--area": AREA_COLORS[area] } as CSSProperties}
+            >
               <h3 id={headingId} className="area-heading">
                 {area}
               </h3>
