@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { TrailCard } from './components/TrailCard';
-import { LanguageSwitch } from './components/LanguageSwitch';
-import { TrailMap } from './components/TrailMap';
-import { areas, trails, type Trail } from './data/trails';
-import { useLang } from './i18n/context';
-import './App.css';
+import { useState } from "react";
+import { TrailCard } from "./components/TrailCard";
+import { LanguageSwitch } from "./components/LanguageSwitch";
+import { TrailMap } from "./components/TrailMap";
+import { areas, trails, type Trail } from "./data/trails";
+import { useLang } from "./i18n/context";
+import "./App.css";
 
 export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -13,13 +13,20 @@ export default function App() {
   // Picking a trail on the map scrolls its card into view.
   const selectFromMap = (id: string) => {
     setSelectedId(id);
-    document.getElementById(`trail-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document
+      .getElementById(`trail-${id}`)
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
   const grid = (list: Trail[]) => (
     <div className="trail-grid">
       {list.map((trail) => (
-        <TrailCard key={trail.id} trail={trail} selected={trail.id === selectedId} onSelect={setSelectedId} />
+        <TrailCard
+          key={trail.id}
+          trail={trail}
+          selected={trail.id === selectedId}
+          onSelect={setSelectedId}
+        />
       ))}
     </div>
   );
@@ -33,7 +40,7 @@ export default function App() {
         {areas.map((area) => {
           const inArea = list.filter((t) => t.area === area);
           if (!inArea.length) return null;
-          const headingId = `area-${area.toLowerCase().replace(/\s+/g, '-')}`;
+          const headingId = `area-${area.toLowerCase().replace(/\s+/g, "-")}`;
           return (
             <section key={area} className="area" aria-labelledby={headingId}>
               <h3 id={headingId} className="area-heading">
@@ -51,9 +58,8 @@ export default function App() {
   return (
     <div className="page">
       <header className="site-header">
-        <LanguageSwitch />
         <h1>Maus Caminhos</h1>
-        <p>{t.tagline}</p>
+        <div className="header-row">
         <a
           className="instagram-link"
           href="https://www.instagram.com/mauscaminhos.porto/"
@@ -61,17 +67,39 @@ export default function App() {
           rel="noopener noreferrer"
         >
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="2" />
-            <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="2" />
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
             <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
           </svg>
           @mauscaminhos.porto
         </a>
+        <LanguageSwitch />
+        </div>
       </header>
 
       <main>
         <section aria-label={t.mapLabel}>
-          <TrailMap trails={trails} selectedId={selectedId} onSelect={selectFromMap} />
+          <TrailMap
+            trails={trails}
+            selectedId={selectedId}
+            onSelect={selectFromMap}
+          />
         </section>
 
         <section className="trail-list" aria-label={t.trailsLabel}>
